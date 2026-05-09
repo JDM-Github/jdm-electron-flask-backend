@@ -1,30 +1,11 @@
 import os
-import sys
-from dotenv import load_dotenv
+from jdm_electron_flask import JDMDevelopmentConfig, JDMProductionConfig, JDMDeployedConfig
 
-def _load_env():
-    """Load .env from PyInstaller bundle first, then CWD."""
-    meipass = getattr(sys, "_MEIPASS", None)
-    if meipass:
-        load_dotenv(os.path.join(meipass, ".env"))
-    load_dotenv(os.path.join(os.path.abspath("."), ".env"), override=False)
-
-_load_env()
-
-class Config:
-    """Base configuration. Add your shared env vars here."""
-    SECRET_KEY      = os.getenv("SECRET_KEY", "change-me-in-production")
+class _AppConfig:
+    """Shared app-level fields across all environments."""
     MAX_WORKERS     = int(os.getenv("MAX_WORKERS", "2"))
     REQUEST_TIMEOUT = int(os.getenv("REQUEST_TIMEOUT", "60"))
 
-class DevelopmentConfig(Config):
-    FLASK_ENV = "development"
-    DEBUG     = True
-
-class ProductionConfig(Config):
-    FLASK_ENV = "production"
-    DEBUG     = False
-
-class DeployedConfig(Config):
-    FLASK_ENV = "deployed"
-    DEBUG     = False
+class DevelopmentConfig(_AppConfig, JDMDevelopmentConfig): pass
+class ProductionConfig(_AppConfig, JDMProductionConfig):   pass
+class DeployedConfig(_AppConfig, JDMDeployedConfig):       pass

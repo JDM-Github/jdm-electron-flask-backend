@@ -1,10 +1,9 @@
-from flask import Blueprint
-from app.utils.responses import success
-from app.utils.validators import require_access
+from jdm_electron_flask import JDMBlueprint, success
 
-health_bp = Blueprint("health", __name__)
+class HealthBlueprint(JDMBlueprint):
+    def __init__(self):
+        super().__init__("health", __name__)
 
-@health_bp.route("/health", methods=["GET"])
-@require_access
-def health():
-    return success({"status": "ok"}, "Service is running")
+    @JDMBlueprint.get("/health", auth=True)
+    def health():
+        return success({"status": "ok"}, "Service is running")
