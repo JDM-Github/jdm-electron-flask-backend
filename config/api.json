@@ -1,0 +1,12 @@
+{
+    "health": {
+        "link": "/api",
+        "masterEnabled": true
+    },
+    "example": {
+        "link": "/api/example",
+        "masterEnabled": true,
+        "disabledOnProduction": false,
+        "disabledOnDeployed": false
+    }
+}

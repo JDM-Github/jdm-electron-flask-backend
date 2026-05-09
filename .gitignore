@@ -4,3 +4,4 @@ dist/
 build/
 static/
 flask_server.spec
+logs/

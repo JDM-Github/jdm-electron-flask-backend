@@ -1,6 +1,7 @@
 import sys
 import os
-import waitress  # type: ignore
+import eventlet
+eventlet.monkey_patch()
 
 def resource_path(relative_path):
     """Resolve paths correctly whether running as script or PyInstaller bundle."""
@@ -11,17 +12,18 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 os.environ.setdefault("FLASK_ENV", "production")
-from app import create_app
+from app import create_app, socketio
+from app.utils.printer import Printer
 
 static_folder = resource_path("static")
 app = create_app(config_name="production", static_folder=static_folder)
 port = int(os.environ.get("FLASK_PORT", 5000))
 
-print("=" * 50)
-print("Production server starting...")
-print(f"Environment: {app.config.get('FLASK_ENV', 'production')}")
-print(f"Serving on http://127.0.0.1:{port}")
-print("Press Ctrl+C to stop")
-print("=" * 50)
+Printer.log("=" * 50)
+Printer.log("Production server starting...")
+Printer.log(f"Environment: {app.config.get('FLASK_ENV', 'production')}")
+Printer.log(f"Serving on http://127.0.0.1:{port}")
+Printer.log("Press Ctrl+C to stop")
+Printer.log("=" * 50)
 
-waitress.serve(app, host="0.0.0.0", port=port)
+socketio.run(app, host="0.0.0.0", port=port, debug=False)
