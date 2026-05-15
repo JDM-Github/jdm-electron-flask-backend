@@ -4,4 +4,4 @@ python-dotenv
 waitress
 requests
 simple-websocket
-jdm_electron_flask
+jdm_electron_flask===1.0.5

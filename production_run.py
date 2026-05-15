@@ -1,6 +1,13 @@
 import sys, os
-os.environ.setdefault("FLASK_ENV", "production")
+import app.api
+import app.event
 from jdm_electron_flask import create_app, get_socketio, Printer
+
+os.environ.setdefault("FLASK_ENV", "production")
+for key in ("FLASK_ENV", "FLASK_PORT"):
+    val = os.environ.get(key)
+    if val:
+        os.environ[key] = val.strip()
 
 def resource_path(relative_path):
     try:
